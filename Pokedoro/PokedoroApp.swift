@@ -6,12 +6,15 @@
 //
 
 import SwiftUI
+import PokemonAPI
 
 @main
 struct PokedoroApp: App {
     var body: some Scene {
         WindowGroup {
+            let pokemonAPI = PokemonAPI()
             ContentView()
+                .environmentObject(pokemonAPI)
         }
     }
 }
