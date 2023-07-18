@@ -20,8 +20,20 @@ struct PokedexView: View {
         ScrollView {
             LazyVGrid(columns: columns) {
                 ForEach(pokemonList, id: \.id) { pokemon in
-                    PokemonImageView(id: pokemon.id ?? 1, types: getTypeStrings(from: pokemon.types ?? []))
-                        .frame(width: 160, height: 160)
+                    VStack {
+                        PokemonImageView(id: pokemon.id ?? 1, types: getTypeStrings(from: pokemon.types ?? []))
+                            .frame(width: 160, height: 160)
+                        Text(pokemon.name?.capitalized ?? "")
+                            .font(.callout)
+                        HStack {
+                            ForEach(getTypeStrings(from: pokemon.types ?? []), id: \.self) { type in
+                                Text(type)
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                            }
+                        }
+                    }
+                    
                 }
             }
             .padding(.horizontal)
