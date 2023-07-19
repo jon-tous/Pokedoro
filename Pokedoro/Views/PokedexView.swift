@@ -14,7 +14,11 @@ struct PokedexView: View {
     
     @State private var selection: PKMPokemon?
     
-    let availableIDs = 1...151
+    enum SortMethod: String, CaseIterable {
+        case byIDNumber = "Sort by ID"
+        case byType = "Sort by Type"
+    }
+    @State private var currentSortMethod: SortMethod = .byIDNumber
     
     let columns = [GridItem(.adaptive(minimum: 120))]
 
@@ -25,6 +29,7 @@ struct PokedexView: View {
                     VStack {
                         PokemonImageView(id: pokemon.id ?? 1, types: PokemonType.getTypeStrings(from: pokemon.types ?? []))
                             .frame(width: 160, height: 160)
+                        Text(String(pokemon.id ?? 0)) // TODO: delete this
                         Text(pokemon.name?.capitalized ?? "")
                             .font(.callout)
                         HStack {
@@ -49,6 +54,23 @@ struct PokedexView: View {
         .sheet(item: $selection) { selectedPokemon in
             PokemonDetailView(pokemon: selectedPokemon)
         }
+        .onChange(of: currentSortMethod) { newValue in
+            if newValue == SortMethod.byIDNumber {
+                sortByID()
+            }
+            else if newValue == SortMethod.byType {
+                sortByType()
+            }
+        }
+        .toolbar {
+            ToolbarItem {
+                Picker("Sort", selection: $currentSortMethod) {
+                    ForEach(SortMethod.allCases, id: \.self) {
+                        Text($0.rawValue)
+                    }
+                }
+            }
+        }
     }
     
     func populatePokemonList() async {
@@ -61,6 +83,15 @@ struct PokedexView: View {
                 print("Error loading pokemon with ID \(num)")
             }
         }
+    }
+    
+    func sortByType() {
+        sortByID()
+        pokemonList.sort { $0.types?.first?.type?.name ?? "A" < $1.types?.first?.type?.name ?? "B" }
+    }
+    
+    func sortByID() {
+        pokemonList.sort { $0.id! < $1.id! }
     }
 }
 

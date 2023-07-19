@@ -8,9 +8,7 @@
 import SwiftUI
 import PokemonAPI
 
-enum PokemonType: String, Codable, Identifiable {
-    var id: Self { self }
-    
+enum PokemonType: String, Codable, Identifiable, Comparable {
     case Grass
     case Poison
     case Fire
@@ -29,6 +27,12 @@ enum PokemonType: String, Codable, Identifiable {
     case Ghost
     case Dragon
     case Dark
+    
+    static func < (lhs: PokemonType, rhs: PokemonType) -> Bool {
+        lhs.rawValue < rhs.rawValue
+    }
+    
+    var id: Self { self }
     
     static func getSymbolFromType(type: PokemonType) -> String {
 
