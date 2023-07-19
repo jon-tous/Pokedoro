@@ -12,6 +12,8 @@ struct PokedexView: View {
     @EnvironmentObject var pokemonAPI: PokemonAPI
     @State private var pokemonList = [PKMPokemon]()
     
+    @State private var selection: PKMPokemon?
+    
     let availableIDs = 1...151
     
     let columns = [GridItem(.adaptive(minimum: 120))]
@@ -21,19 +23,21 @@ struct PokedexView: View {
             LazyVGrid(columns: columns) {
                 ForEach(pokemonList, id: \.id) { pokemon in
                     VStack {
-                        PokemonImageView(id: pokemon.id ?? 1, types: getTypeStrings(from: pokemon.types ?? []))
+                        PokemonImageView(id: pokemon.id ?? 1, types: PokemonType.getTypeStrings(from: pokemon.types ?? []))
                             .frame(width: 160, height: 160)
                         Text(pokemon.name?.capitalized ?? "")
                             .font(.callout)
                         HStack {
-                            ForEach(getTypeStrings(from: pokemon.types ?? []), id: \.self) { type in
+                            ForEach(PokemonType.getTypeStrings(from: pokemon.types ?? []), id: \.self) { type in
                                 Text(type)
                                     .font(.caption)
                                     .foregroundColor(.secondary)
                             }
                         }
                     }
-                    
+                    .onTapGesture {
+                        selection = pokemon
+                    }
                 }
             }
             .padding(.horizontal)
@@ -41,6 +45,9 @@ struct PokedexView: View {
         .navigationTitle("Pokédex")
         .task {
             await populatePokemonList()
+        }
+        .sheet(item: $selection) { selectedPokemon in
+            PokemonDetailView(pokemon: selectedPokemon)
         }
     }
     
@@ -55,11 +62,6 @@ struct PokedexView: View {
             }
         }
     }
-    
-    func getTypeStrings(from typeArray: [PKMPokemonType]) -> [String] {
-        typeArray.compactMap { $0.type?.name?.capitalized }
-    }
-
 }
 
 struct PokedexView_Previews: PreviewProvider {

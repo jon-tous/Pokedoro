@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import PokemonAPI
 
 enum PokemonType: String, Codable, Identifiable {
     var id: Self { self }
@@ -69,5 +70,9 @@ enum PokemonType: String, Codable, Identifiable {
         case .Dark:
             return "moon"
         }
+    }
+    
+    static func getTypeStrings(from typeArray: [PKMPokemonType]) -> [String] {
+        typeArray.compactMap { $0.type?.name?.capitalized }
     }
 }
