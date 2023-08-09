@@ -30,7 +30,7 @@ struct PokedexView: View {
                 LazyVGrid(columns: columns) {
                     ForEach(pokemonList, id: \.id) { pokemon in
                         VStack {
-                            PokemonImageView(id: pokemon.id ?? 1, types: PokemonType.getTypeStrings(from: pokemon.types ?? []))
+                            PokemonImageView(id: pokemon.id ?? 1, types: PokemonType.getTypeStrings(from: pokemon.types ?? []), silhouette: true)
                                 .frame(width: 160, height: 160)
                             HStack {
                                 Text(pokemon.name?.capitalized ?? "")

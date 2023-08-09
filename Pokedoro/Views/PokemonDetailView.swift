@@ -13,7 +13,7 @@ struct PokemonDetailView: View {
     
     var body: some View {
         VStack {
-            PokemonImageView(id: pokemon.id ?? 0, types: PokemonType.getTypeStrings(from: pokemon.types ?? []))
+            PokemonImageView(id: pokemon.id ?? 0, types: PokemonType.getTypeStrings(from: pokemon.types ?? []), silhouette: false)
             Text(pokemon.name?.capitalized ?? "")
                 .font(.callout)
             HStack {
