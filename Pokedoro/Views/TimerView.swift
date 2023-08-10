@@ -5,11 +5,15 @@
 //  Created by Jon Toussaint on 7/21/23.
 //
 
+import PokemonAPI
 import SwiftUI
 
 struct TimerView: View {
+    @EnvironmentObject var pokemonAPI: PokemonAPI
     @State private var countdownTime = CGFloat(TimerInfo.timerLength * 60)
     @State private var timerRunning = false
+    
+    @State private var newPokemon: PKMPokemon?
     
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
@@ -17,9 +21,9 @@ struct TimerView: View {
     
     var countdownColor: Color {
         switch(countdownTime) {
-        case CGFloat(TimerInfo.timerLength * 60 / 2)...: return Color.green
-        case CGFloat(TimerInfo.timerLength * 60 / 4)...: return Color.yellow
-        default: return Color.red
+        case CGFloat(TimerInfo.timerLength * 60 / 2)...: return .accentColor
+        case CGFloat(TimerInfo.timerLength * 60 / 4)...: return .accentColor.opacity(0.75)
+        default: return .accentColor.opacity(0.5)
         }
     }
     
@@ -59,12 +63,67 @@ struct TimerView: View {
             } else {
                 timerRunning = false
                 countdownTime = CGFloat(TimerInfo.timerLength * 60)
+                Task { await discoverPokemon() }
             }
         }
         .onChange(of: TimerInfo.timerLength) { newValue in
             timerRunning = false
             countdownTime = CGFloat(TimerInfo.timerLength * 60)
         }
+        .sheet(item: $newPokemon) { pokemon in
+            discoveredPokemonView(pokemon: pokemon)
+                .onAppear {
+                    // TODO: Add to collectedPokemon
+                    print("Adding \(pokemon.name?.capitalized ?? "N/A") to pokedex")
+                }
+                .onDisappear {
+                    newPokemon = nil
+                }
+        }
+    }
+    
+    func discoverPokemon() async {
+        
+        let randNum = Int.random(in: 1...Generation.LastIDInGeneration.gen1.rawValue)
+        // TODO: disallow numbers already in collectedPokémon; handle if someone has discovered all available pokémon
+        
+        if let pokemon = try? await pokemonAPI.pokemonService.fetchPokemon(randNum) {
+            newPokemon = pokemon
+        } else {
+            print("Error loading pokemon with ID \(randNum)")
+        }
+    }
+    
+    func discoveredPokemonView(pokemon: PKMPokemon) -> some View {
+        VStack {
+            Spacer()
+            
+            Text("Nice work, trainer!")
+                .font(.largeTitle)
+                .padding(.vertical)
+            Group {
+                Text(pokemon.name?.capitalized ?? "A Pokémon")
+                    .foregroundColor(.accentColor) +
+                Text(" has been added to your Pokédex.")
+                    .foregroundColor(.secondary)
+            }.font(.headline)
+            
+            Spacer()
+            PokemonDetailView(pokemon: pokemon)
+            Spacer()
+            
+            Button {
+                // Clear newPokemon to dismiss the sheet
+                newPokemon = nil
+            } label: {
+                Text("OK")
+            }
+            .buttonStyle(.borderedProminent).tint(.purple)
+            
+            Spacer()
+        }
+        .fontWeight(.medium)
+        .padding(.horizontal)
     }
 }
 

@@ -49,9 +49,7 @@ struct PokedexView: View {
                                 }
                             }
                         }
-                        .onTapGesture {
-                            selection = pokemon
-                        }
+                        .onTapGesture { selection = pokemon }
                     }
                 }
                 .padding(.horizontal)

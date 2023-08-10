@@ -15,8 +15,12 @@ struct ExploreView: View {
             BackgroundGradient()
             VStack {
                 Spacer()
-                Text("Focus for \(timerLength) minutes to catch a new Pokémon!")
-                    .font(.title2).fontWeight(.medium)
+                Group {
+                    Text("Focus for ") +
+                    Text("\(timerLength) \(timerLength == 1 ? "minute" : "minutes")").bold() +
+                    Text(" to catch a new Pokémon!")
+                }
+                    .font(.title).fontWeight(.medium)
                     .multilineTextAlignment(.center)
                     .padding()
                 Spacer()
