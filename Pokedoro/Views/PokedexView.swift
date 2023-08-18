@@ -11,9 +11,9 @@ import SwiftUI
 struct PokedexView: View {
     @EnvironmentObject var pokemonAPI: PokemonAPI
     @EnvironmentObject var collection: PokemonCollection
+    @EnvironmentObject var pokemonEvolutions: PokemonEvolutions
     
     @State private var pokemonList = [PKMPokemon]()
-    @State private var pokemonEvolutions = [String: Set<String>]() // ["eevee" : ["vaporeon", "jolteon", "flareon"...]] // ["bulbasaur" : ["ivysaur"]]
     @State private var selection: PKMPokemon?
     
     enum SortMethod: String, CaseIterable {
@@ -32,24 +32,11 @@ struct PokedexView: View {
                 LazyVGrid(columns: columns) {
                     ForEach(pokemonList, id: \.id) { pokemon in
                         VStack {
-                            PokemonImageView(id: pokemon.id ?? 1, types: PokemonType.getTypeStrings(from: pokemon.types ?? []), silhouette: !collection.ownedPokemon.contains(pokemon))
+                            PokemonImageView(id: pokemon.id ?? 1,
+                                             types: PokemonType.getTypeStrings(from: pokemon.types ?? []),
+                                             silhouette: !collection.ownedPokemon.contains(pokemon))
                                 .frame(width: 160, height: 160)
-                            HStack {
-                                Text(pokemon.name?.capitalized ?? "")
-                                    .font(.callout)
-                                if hasEvolution(pokemon: pokemon) && allEvolutionsOwned(for: pokemon) {
-                                    Label("Evolution available", systemImage: "arrow.up")
-                                        .labelStyle(.iconOnly)
-                                        .font(.caption).bold()
-                                }
-                            }
-                            HStack {
-                                ForEach(PokemonType.getTypeStrings(from: pokemon.types ?? []), id: \.self) { type in
-                                    Text(type)
-                                        .font(.caption)
-                                        .foregroundColor(.secondary)
-                                }
-                            }
+                            PokemonTitleView(pokemon: pokemon)
                         }
                         .onTapGesture { selection = pokemon }
                     }
@@ -135,13 +122,13 @@ struct PokedexView: View {
                         }
                     }
                     print("evolves to \(nextEvolutions.description)")
-                    pokemonEvolutions[name] = nextEvolutions
+                    pokemonEvolutions.pokemonEvolutions[name] = nextEvolutions
                 }
             } catch {
                 print("Error loading pokemon with ID \(num)")
             }
         }
-        print(pokemonEvolutions.debugDescription)
+        print(pokemonEvolutions.pokemonEvolutions.debugDescription)
     }
     
     func searchEvolutionPath(forName name: String?, startingAt root: PKMClainLink) -> PKMClainLink? {
@@ -166,29 +153,6 @@ struct PokedexView: View {
         return nil
     }
     
-    func hasEvolution(pokemon: PKMPokemon) -> Bool {
-        if let name = pokemon.name {
-            if let hasNoEvolutions = pokemonEvolutions[name]?.isEmpty {
-                return !hasNoEvolutions
-            }
-        }
-        return false
-    }
-    
-    // TODO: test when user collected pokemon feature is built out
-    // TODO: have to populate this logic once all pokemon have been loaded
-    func allEvolutionsOwned(for pokemon: PKMPokemon) -> Bool {
-        if let evolutions = pokemonEvolutions[pokemon.name!] {
-            for evolution in evolutions {
-                if (collection.allNames.contains(evolution) == false) { // pokemonEvolutions.keys.contains(evolution) &&
-                    return false
-                }
-            }
-            return true
-        }
-        return false
-    }
-    
     func sortByType() {
         sortByID()
         pokemonList.sort { $0.types?.first?.type?.name ?? "A" < $1.types?.first?.type?.name ?? "B" }
@@ -210,6 +174,7 @@ struct PokedexView_Previews: PreviewProvider {
             PokedexView()
                 .environmentObject(PokemonAPI())
                 .environmentObject(PokemonCollection())
+                .environmentObject(PokemonEvolutions())
         }
     }
 }

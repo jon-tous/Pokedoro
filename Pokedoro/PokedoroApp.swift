@@ -14,9 +14,12 @@ struct PokedoroApp: App {
         WindowGroup {
             let pokemonAPI = PokemonAPI()
             let pokemonCollection = PokemonCollection()
+            let pokemonEvolutions = PokemonEvolutions()
+            
             ContentView()
                 .environmentObject(pokemonAPI)
                 .environmentObject(pokemonCollection)
+                .environmentObject(pokemonEvolutions)
         }
     }
 }

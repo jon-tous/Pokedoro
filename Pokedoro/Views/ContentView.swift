@@ -25,15 +25,15 @@ struct ContentView: View {
             }
             .tabItem { Label("Pokédex", systemImage: "text.book.closed.fill") }.tag(1)
             
-            if collection.ownedPokemon.count < trainingUnlockLevel {
-                LockedView(unlockLevel: trainingUnlockLevel, currentLevel: collection.ownedPokemon.count)
-                    .tabItem { Label("???", systemImage: "lock") }
-                    .tag(2)
-            } else {
-                TrainingView()
-                    .tabItem { Label("Train", systemImage: "sportscourt") }
-                    .tag(2)
-            }
+            Group {
+                if collection.ownedPokemon.count < trainingUnlockLevel {
+                    LockedView(unlockLevel: trainingUnlockLevel, currentLevel: collection.ownedPokemon.count)
+                        .tabItem { Label("???", systemImage: "lock") }
+                } else {
+                    TrainingView()
+                        .tabItem { Label("Train", systemImage: "sportscourt") }
+                }
+            }.tag(2)
             
             NavigationStack {
                 SettingsView()
@@ -48,5 +48,6 @@ struct ContentView_Previews: PreviewProvider {
         ContentView()
             .environmentObject(PokemonAPI())
             .environmentObject(PokemonCollection())
+            .environmentObject(PokemonEvolutions())
     }
 }

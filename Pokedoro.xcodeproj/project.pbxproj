@@ -26,6 +26,8 @@
 		157784DD2A6AEE8B008D0751 /* BackgroundGradient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157784DC2A6AEE8B008D0751 /* BackgroundGradient.swift */; };
 		157A60692A83F3B8002F5CBF /* ImageAPIResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A60682A83F3B8002F5CBF /* ImageAPIResponse.swift */; };
 		1586EA8D2A8F2BD8002DB308 /* LockedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1586EA8C2A8F2BD8002DB308 /* LockedView.swift */; };
+		1586EA8F2A8FB27D002DB308 /* PokemonTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1586EA8E2A8FB27D002DB308 /* PokemonTitleView.swift */; };
+		1586EA912A8FB420002DB308 /* PokemonEvolutions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1586EA902A8FB420002DB308 /* PokemonEvolutions.swift */; };
 		15C449BE2A856E0600A8EA1E /* TrainingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15C449BD2A856E0600A8EA1E /* TrainingView.swift */; };
 /* End PBXBuildFile section */
 
@@ -50,6 +52,8 @@
 		157784DC2A6AEE8B008D0751 /* BackgroundGradient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundGradient.swift; sourceTree = "<group>"; };
 		157A60682A83F3B8002F5CBF /* ImageAPIResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageAPIResponse.swift; sourceTree = "<group>"; };
 		1586EA8C2A8F2BD8002DB308 /* LockedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockedView.swift; sourceTree = "<group>"; };
+		1586EA8E2A8FB27D002DB308 /* PokemonTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonTitleView.swift; sourceTree = "<group>"; };
+		1586EA902A8FB420002DB308 /* PokemonEvolutions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonEvolutions.swift; sourceTree = "<group>"; };
 		15C449BD2A856E0600A8EA1E /* TrainingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainingView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -88,6 +92,7 @@
 				156E11302A65D6C3007AE90E /* PokedoroApp.swift */,
 				156E113E2A65D6D8007AE90E /* Views */,
 				156E113F2A65D6E2007AE90E /* Models */,
+				1586EA922A8FB480002DB308 /* Extensions */,
 				156E11342A65D6C4007AE90E /* Assets.xcassets */,
 				156E11362A65D6C4007AE90E /* Preview Content */,
 			);
@@ -115,6 +120,7 @@
 				157784DC2A6AEE8B008D0751 /* BackgroundGradient.swift */,
 				15C449BD2A856E0600A8EA1E /* TrainingView.swift */,
 				1586EA8C2A8F2BD8002DB308 /* LockedView.swift */,
+				1586EA8E2A8FB27D002DB308 /* PokemonTitleView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -122,14 +128,22 @@
 		156E113F2A65D6E2007AE90E /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				156E11452A662AC6007AE90E /* PokemonAPI+.swift */,
-				156E114D2A676314007AE90E /* PKMPokemon+.swift */,
 				156E11472A662C0F007AE90E /* PokemonType.swift */,
 				150B0AB62A72E0ED0017BE6F /* Generation.swift */,
 				150B0AB82A72E8970017BE6F /* PokemonCollection.swift */,
+				1586EA902A8FB420002DB308 /* PokemonEvolutions.swift */,
 				157A60682A83F3B8002F5CBF /* ImageAPIResponse.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		1586EA922A8FB480002DB308 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				156E11452A662AC6007AE90E /* PokemonAPI+.swift */,
+				156E114D2A676314007AE90E /* PKMPokemon+.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -218,6 +232,7 @@
 				156E11332A65D6C3007AE90E /* ContentView.swift in Sources */,
 				156E114A2A6631CB007AE90E /* PokemonImageView.swift in Sources */,
 				1586EA8D2A8F2BD8002DB308 /* LockedView.swift in Sources */,
+				1586EA912A8FB420002DB308 /* PokemonEvolutions.swift in Sources */,
 				156E11482A662C0F007AE90E /* PokemonType.swift in Sources */,
 				156E11462A662AC6007AE90E /* PokemonAPI+.swift in Sources */,
 				150B0AB92A72E8970017BE6F /* PokemonCollection.swift in Sources */,
@@ -225,6 +240,7 @@
 				1507160B2A6ECECE000CC405 /* SettingsView.swift in Sources */,
 				156E11312A65D6C3007AE90E /* PokedoroApp.swift in Sources */,
 				157784DD2A6AEE8B008D0751 /* BackgroundGradient.swift in Sources */,
+				1586EA8F2A8FB27D002DB308 /* PokemonTitleView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
