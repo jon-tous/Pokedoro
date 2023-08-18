@@ -10,7 +10,7 @@ import SwiftUI
 struct SettingsView: View {
     @AppStorage("timerLength") var timerLength = 25
     
-    let timerLengths = [1, 10, 15, 20, 25, 30, 45, 50] // 1 min option is just for testing... TODO delete it
+    let timerLengths = [1, 10, 15, 20, 25, 30, 45, 50] // 1 min option is just for testing...
     
     var body: some View {
         Form {
@@ -27,7 +27,6 @@ struct SettingsView: View {
             }
             .listRowSeparator(.hidden)
         }
-        .tint(.red)
         .navigationTitle("Settings")
     }
 }

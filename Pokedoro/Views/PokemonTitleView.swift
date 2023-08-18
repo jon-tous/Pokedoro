@@ -22,20 +22,26 @@ struct PokemonTitleView: View {
             HStack {
                 Text(displayName)
                     .font(.callout)
+                    .fontWeight(.medium)
                 if hasEvolution(pokemon: pokemon) && allEvolutionsOwned(for: pokemon) {
-                    Label("Evolution available", systemImage: "arrow.up")
-                        .labelStyle(.iconOnly)
-                        .font(.caption).bold()
+                    evolvableIcon
                 }
             }
             HStack {
                 ForEach(displayTypes, id: \.self) { type in
                     Text(type)
                         .font(.caption)
+//                        .fontWeight(.medium)  // Not sure if I like medium weight or normal
                         .foregroundColor(.secondary)
                 }
             }
         }
+    }
+    
+    var evolvableIcon: some View {
+        Label("Evolution available", systemImage: "arrow.up")
+            .labelStyle(.iconOnly)
+            .font(.caption).bold()
     }
     
     func hasEvolution(pokemon: PKMPokemon) -> Bool {

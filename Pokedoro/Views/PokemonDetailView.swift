@@ -9,20 +9,17 @@ import SwiftUI
 import PokemonAPI
 
 struct PokemonDetailView: View {
+    @EnvironmentObject var collection: PokemonCollection
+    
     let pokemon: PKMPokemon
     
     var body: some View {
         VStack {
-            PokemonImageView(id: pokemon.id ?? 0, types: PokemonType.getTypeStrings(from: pokemon.types ?? []), silhouette: false)
-            Text(pokemon.name?.capitalized ?? "")
-                .font(.callout)
-            HStack {
-                ForEach(PokemonType.getTypeStrings(from: pokemon.types ?? []), id: \.self) { type in
-                    Text(type)
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                }
-            }
+            PokemonImageView(id: pokemon.id ?? 0, types: PokemonType.getTypeStrings(from: pokemon.types ?? []),
+//                             silhouette: !collection.ownedPokemon.contains(pokemon))
+                             silhouette: false) // for debugging
+                .padding()
+            PokemonTitleView(pokemon: pokemon)
         }
     }
 }

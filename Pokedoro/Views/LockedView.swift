@@ -14,7 +14,7 @@ struct LockedView: View {
     var body: some View {
         ZStack {
             BackgroundGradient()
-            Text("Collect \(unlockLevel - currentLevel) more Pokémon \nand check back!")
+            Text("Catch \(unlockLevel - currentLevel) more Pokémon \nand check back!")
                 .font(.title).fontWeight(.medium)
                 .multilineTextAlignment(.center)
                 .padding()

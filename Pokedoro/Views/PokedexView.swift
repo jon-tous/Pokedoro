@@ -73,7 +73,7 @@ struct PokedexView: View {
                 }
                 ToolbarItem(placement: .navigationBarLeading) {
                     Text("\(collection.ownedPokemon.count)/\(Generation.LastIDInGeneration.gen1.rawValue)")
-                        .bold()
+                        .fontWeight(.medium)
                         .foregroundColor(.secondary)
                         .padding(.horizontal)
                 }

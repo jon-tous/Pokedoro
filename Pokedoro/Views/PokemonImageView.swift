@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-/// Microservice version of PokemonImageView
 struct PokemonImageView: View {
     let id: Int
     let types: [String]

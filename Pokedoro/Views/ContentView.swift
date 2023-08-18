@@ -40,6 +40,12 @@ struct ContentView: View {
             }
             .tabItem { Label("Settings", systemImage: "gearshape") }.tag(3)
         }
+        .onAppear {
+            // Fixes bug with iOS 15+ tab bar background
+            let tabBarAppearance = UITabBarAppearance()
+            tabBarAppearance.configureWithDefaultBackground()
+            UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
+        }
     }
 }
 
