@@ -25,6 +25,8 @@
 		157784DB2A6AEC02008D0751 /* TimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157784DA2A6AEC02008D0751 /* TimerView.swift */; };
 		157784DD2A6AEE8B008D0751 /* BackgroundGradient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157784DC2A6AEE8B008D0751 /* BackgroundGradient.swift */; };
 		157A60692A83F3B8002F5CBF /* ImageAPIResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157A60682A83F3B8002F5CBF /* ImageAPIResponse.swift */; };
+		1586EA8D2A8F2BD8002DB308 /* LockedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1586EA8C2A8F2BD8002DB308 /* LockedView.swift */; };
+		15C449BE2A856E0600A8EA1E /* TrainingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15C449BD2A856E0600A8EA1E /* TrainingView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -47,6 +49,8 @@
 		157784DA2A6AEC02008D0751 /* TimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerView.swift; sourceTree = "<group>"; };
 		157784DC2A6AEE8B008D0751 /* BackgroundGradient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundGradient.swift; sourceTree = "<group>"; };
 		157A60682A83F3B8002F5CBF /* ImageAPIResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageAPIResponse.swift; sourceTree = "<group>"; };
+		1586EA8C2A8F2BD8002DB308 /* LockedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockedView.swift; sourceTree = "<group>"; };
+		15C449BD2A856E0600A8EA1E /* TrainingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainingView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,6 +113,8 @@
 				157784DA2A6AEC02008D0751 /* TimerView.swift */,
 				1507160A2A6ECECE000CC405 /* SettingsView.swift */,
 				157784DC2A6AEE8B008D0751 /* BackgroundGradient.swift */,
+				15C449BD2A856E0600A8EA1E /* TrainingView.swift */,
+				1586EA8C2A8F2BD8002DB308 /* LockedView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -206,10 +212,12 @@
 				157A60692A83F3B8002F5CBF /* ImageAPIResponse.swift in Sources */,
 				150B0AB72A72E0ED0017BE6F /* Generation.swift in Sources */,
 				156E114E2A676314007AE90E /* PKMPokemon+.swift in Sources */,
+				15C449BE2A856E0600A8EA1E /* TrainingView.swift in Sources */,
 				157784D92A6AEBEF008D0751 /* ExploreView.swift in Sources */,
 				156E11412A65D729007AE90E /* PokedexView.swift in Sources */,
 				156E11332A65D6C3007AE90E /* ContentView.swift in Sources */,
 				156E114A2A6631CB007AE90E /* PokemonImageView.swift in Sources */,
+				1586EA8D2A8F2BD8002DB308 /* LockedView.swift in Sources */,
 				156E11482A662C0F007AE90E /* PokemonType.swift in Sources */,
 				156E11462A662AC6007AE90E /* PokemonAPI+.swift in Sources */,
 				150B0AB92A72E8970017BE6F /* PokemonCollection.swift in Sources */,

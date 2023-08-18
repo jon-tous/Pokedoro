@@ -13,8 +13,10 @@ struct PokedoroApp: App {
     var body: some Scene {
         WindowGroup {
             let pokemonAPI = PokemonAPI()
+            let pokemonCollection = PokemonCollection()
             ContentView()
                 .environmentObject(pokemonAPI)
+                .environmentObject(pokemonCollection)
         }
     }
 }

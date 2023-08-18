@@ -9,21 +9,32 @@ import SwiftUI
 import PokemonAPI
 
 struct ContentView: View {
+    @EnvironmentObject var collection: PokemonCollection
+    
     @State private var selectedTab = 1
+    
+    let trainingUnlockLevel = 10
     
     var body: some View {
         TabView(selection: $selectedTab) {
             ExploreView()
                 .tabItem { Label("Explore", systemImage: "figure.walk") }.tag(0)
+            
             NavigationStack {
                 PokedexView()
             }
             .tabItem { Label("Pokédex", systemImage: "text.book.closed.fill") }.tag(1)
-            ZStack {
-                BackgroundGradient()
-                Text("Choose a Pokémon with an evolution available to train!")
+            
+            if collection.ownedPokemon.count < trainingUnlockLevel {
+                LockedView(unlockLevel: trainingUnlockLevel, currentLevel: collection.ownedPokemon.count)
+                    .tabItem { Label("???", systemImage: "lock") }
+                    .tag(2)
+            } else {
+                TrainingView()
+                    .tabItem { Label("Train", systemImage: "sportscourt") }
+                    .tag(2)
             }
-            .tabItem { Label("Train", systemImage: "sportscourt") }.tag(2)
+            
             NavigationStack {
                 SettingsView()
             }
@@ -36,5 +47,6 @@ struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
             .environmentObject(PokemonAPI())
+            .environmentObject(PokemonCollection())
     }
 }

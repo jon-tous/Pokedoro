@@ -10,6 +10,8 @@ import SwiftUI
 
 struct TimerView: View {
     @EnvironmentObject var pokemonAPI: PokemonAPI
+    @EnvironmentObject var collection: PokemonCollection
+    
     @State private var countdownTime = CGFloat(TimerInfo.timerLength * 60)
     @State private var timerRunning = false
     
@@ -66,15 +68,16 @@ struct TimerView: View {
                 Task { await discoverPokemon() }
             }
         }
-        .onChange(of: TimerInfo.timerLength) { newValue in
+        .onChange(of: TimerInfo.timerLength) { _ in
             timerRunning = false
             countdownTime = CGFloat(TimerInfo.timerLength * 60)
         }
         .sheet(item: $newPokemon) { pokemon in
             discoveredPokemonView(pokemon: pokemon)
                 .onAppear {
-                    // TODO: Add to collectedPokemon
                     print("Adding \(pokemon.name?.capitalized ?? "N/A") to pokedex")
+                    collection.ownedPokemon.append(pokemon)
+                    print(collection.ownedPokemon.debugDescription)
                 }
                 .onDisappear {
                     newPokemon = nil
@@ -86,6 +89,7 @@ struct TimerView: View {
         
         let randNum = Int.random(in: 1...Generation.LastIDInGeneration.gen1.rawValue)
         // TODO: disallow numbers already in collectedPokémon; handle if someone has discovered all available pokémon
+        // TODO: restrict pokemon discovery to first-level evolutions
         
         if let pokemon = try? await pokemonAPI.pokemonService.fetchPokemon(randNum) {
             newPokemon = pokemon
@@ -135,5 +139,7 @@ struct TimerInfo {
 struct TimerView_Previews: PreviewProvider {
     static var previews: some View {
         TimerView()
+            .environmentObject(PokemonAPI())
+            .environmentObject(PokemonCollection())
     }
 }

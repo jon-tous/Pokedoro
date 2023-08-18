@@ -10,14 +10,16 @@ import SwiftUI
 
 struct PokedexView: View {
     @EnvironmentObject var pokemonAPI: PokemonAPI
+    @EnvironmentObject var collection: PokemonCollection
+    
     @State private var pokemonList = [PKMPokemon]()
-    @State private var ownedPokemon = PokemonCollection()
     @State private var pokemonEvolutions = [String: Set<String>]() // ["eevee" : ["vaporeon", "jolteon", "flareon"...]] // ["bulbasaur" : ["ivysaur"]]
     @State private var selection: PKMPokemon?
     
     enum SortMethod: String, CaseIterable {
         case byIDNumber = "Sort by ID"
         case byType = "Sort by Type"
+        case byDiscovered = "Sort by Discovered"
     }
     @State private var currentSortMethod: SortMethod = .byIDNumber
     
@@ -30,7 +32,7 @@ struct PokedexView: View {
                 LazyVGrid(columns: columns) {
                     ForEach(pokemonList, id: \.id) { pokemon in
                         VStack {
-                            PokemonImageView(id: pokemon.id ?? 1, types: PokemonType.getTypeStrings(from: pokemon.types ?? []), silhouette: true)
+                            PokemonImageView(id: pokemon.id ?? 1, types: PokemonType.getTypeStrings(from: pokemon.types ?? []), silhouette: !collection.ownedPokemon.contains(pokemon))
                                 .frame(width: 160, height: 160)
                             HStack {
                                 Text(pokemon.name?.capitalized ?? "")
@@ -56,7 +58,9 @@ struct PokedexView: View {
             }
             .navigationTitle("Pokédex")
             .task {
-                await populatePokemonList()
+                if pokemonList.count < Generation.LastIDInGeneration.gen1.rawValue {
+                    await populatePokemonList()
+                }
             }
             .sheet(item: $selection) { selectedPokemon in
                 PokemonDetailView(pokemon: selectedPokemon)
@@ -68,6 +72,9 @@ struct PokedexView: View {
                 else if newValue == SortMethod.byType {
                     sortByType()
                 }
+                else if newValue == SortMethod.byDiscovered {
+                    sortByDiscovered()
+                }
             }
             .toolbar {
                 ToolbarItem {
@@ -77,12 +84,19 @@ struct PokedexView: View {
                         }
                     }
                 }
-        }
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Text("\(collection.ownedPokemon.count)/\(Generation.LastIDInGeneration.gen1.rawValue)")
+                        .bold()
+                        .foregroundColor(.secondary)
+                        .padding(.horizontal)
+                }
+            }
         }
     }
     
     func populatePokemonList() async {
         for num in 1...Generation.LastIDInGeneration.gen1.rawValue {
+            if pokemonList.contains(where: { $0.id == num }) { continue }
             do {
                 let pokemon = try await pokemonAPI.pokemonService.fetchPokemon(num)
                 let species = try await pokemonAPI.pokemonService.fetchPokemonSpecies(num)
@@ -127,6 +141,7 @@ struct PokedexView: View {
                 print("Error loading pokemon with ID \(num)")
             }
         }
+        print(pokemonEvolutions.debugDescription)
     }
     
     func searchEvolutionPath(forName name: String?, startingAt root: PKMClainLink) -> PKMClainLink? {
@@ -161,10 +176,11 @@ struct PokedexView: View {
     }
     
     // TODO: test when user collected pokemon feature is built out
+    // TODO: have to populate this logic once all pokemon have been loaded
     func allEvolutionsOwned(for pokemon: PKMPokemon) -> Bool {
         if let evolutions = pokemonEvolutions[pokemon.name!] {
             for evolution in evolutions {
-                if !(ownedPokemon.allNames.contains(evolution)) {
+                if (collection.allNames.contains(evolution) == false) { // pokemonEvolutions.keys.contains(evolution) &&
                     return false
                 }
             }
@@ -181,6 +197,11 @@ struct PokedexView: View {
     func sortByID() {
         pokemonList.sort { $0.id! < $1.id! }
     }
+    
+    func sortByDiscovered() {
+        sortByID()
+        pokemonList.sort { collection.ownedPokemon.contains($0) && !collection.ownedPokemon.contains($1) ? true : false }
+    }
 }
 
 struct PokedexView_Previews: PreviewProvider {
@@ -188,6 +209,7 @@ struct PokedexView_Previews: PreviewProvider {
         NavigationStack {
             PokedexView()
                 .environmentObject(PokemonAPI())
+                .environmentObject(PokemonCollection())
         }
     }
 }
