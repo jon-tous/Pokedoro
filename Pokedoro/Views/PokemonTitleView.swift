@@ -13,11 +13,12 @@ struct PokemonTitleView: View {
     @EnvironmentObject var pokemonEvolutions: PokemonEvolutions
     
     let pokemon: PKMPokemon
-    let useTypeColors: Bool
+    
+    var owned: Bool { collection.ownedPokemon.contains(pokemon) }
     
     var body: some View {
-        let displayName = collection.ownedPokemon.contains(pokemon) ? (pokemon.name?.capitalized ?? "") : "???"
-        let displayTypes = collection.ownedPokemon.contains(pokemon) ? PokemonType.getTypeStrings(from: pokemon.types ?? []) : ["Type(s) unknown"]
+        let displayName = owned ? (pokemon.name?.capitalized ?? "") : "???"
+        let displayTypes = owned ? PokemonType.getTypeStrings(from: pokemon.types ?? []) : ["Type(s) unknown"]
         
         return VStack {
             HStack {
@@ -32,8 +33,7 @@ struct PokemonTitleView: View {
                 ForEach(displayTypes, id: \.self) { type in
                     Text(type)
                         .font(.subheadline)
-                        .fontWeight(useTypeColors ? .medium : .regular)
-                        .foregroundColor(useTypeColors ? Color(type) : .secondary)
+                        .foregroundColor(.secondary)
                 }
             }
         }
@@ -54,12 +54,11 @@ struct PokemonTitleView: View {
         return false
     }
     
-    // TODO: test when user collected pokemon feature is built out
-    // TODO: have to populate this logic once all pokemon have been loaded
+    /// Have to populate this logic once all pokemon have been loaded
     func allEvolutionsOwned(for pokemon: PKMPokemon) -> Bool {
         if let evolutions = pokemonEvolutions.pokemonEvolutions[pokemon.name!] {
             for evolution in evolutions {
-                if (collection.allNames.contains(evolution) == false) { // pokemonEvolutions.keys.contains(evolution) &&
+                if (collection.allNames.contains(evolution) == false) { // && pokemonEvolutions.keys.contains(evolution)
                     return false
                 }
             }

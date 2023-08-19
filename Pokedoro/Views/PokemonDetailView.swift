@@ -15,11 +15,26 @@ struct PokemonDetailView: View {
     
     var body: some View {
         VStack {
-            PokemonImageView(id: pokemon.id ?? 0, types: PokemonType.getTypeStrings(from: pokemon.types ?? []),
-//                             silhouette: !collection.ownedPokemon.contains(pokemon))
-                             silhouette: false) // for debugging
-                .padding()
-            PokemonTitleView(pokemon: pokemon, useTypeColors: true)
+            PokemonImageView(id: pokemon.id ?? 0,
+                             types: PokemonType.getTypeStrings(from: pokemon.types ?? []),
+                             silhouette: !collection.ownedPokemon.contains(pokemon)
+            ).padding()
+            
+            Text(pokemon.name?.capitalized ?? "")
+                .font(.largeTitle)
+            
+            HStack {
+                ForEach(pokemon.types ?? [], id: \.self) { type in
+                    if let typeString = PokemonType.getTypeStrings(from: [type]).first ?? "" {
+                        HStack {
+                            Image(systemName: PokemonType.getSymbolFromType(type: PokemonType(rawValue: typeString) ?? PokemonType.Normal))
+                            Text(typeString)
+                        }
+                        .foregroundColor(Color(typeString))
+                    }
+                }
+            }
         }
+        .fontWeight(.medium)
     }
 }

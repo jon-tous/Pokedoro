@@ -38,7 +38,7 @@ struct PokedexView: View {
                                              types: PokemonType.getTypeStrings(from: pokemon.types ?? []),
                                              silhouette: !collection.ownedPokemon.contains(pokemon))
                                 .frame(width: 160, height: 160)
-                            PokemonTitleView(pokemon: pokemon, useTypeColors: false)
+                            PokemonTitleView(pokemon: pokemon)
                         }
                         .onTapGesture {
                             if collection.ownedPokemon.contains(pokemon) {

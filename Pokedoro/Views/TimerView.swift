@@ -74,7 +74,6 @@ struct TimerView: View {
         }
         .sheet(item: $newPokemon) { pokemon in
             DiscoveredPokemonView(newPokemon: $newPokemon)
-                .onAppear { collection.ownedPokemon.append(pokemon) }
                 .onDisappear { newPokemon = nil }
         }
     }
@@ -86,6 +85,7 @@ struct TimerView: View {
         
         if let pokemon = try? await pokemonAPI.pokemonService.fetchPokemon(randNum) {
             newPokemon = pokemon
+            collection.ownedPokemon.append(pokemon)
         } else {
             print("Error loading pokemon with ID \(randNum)")
         }
