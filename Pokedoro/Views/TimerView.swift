@@ -73,20 +73,13 @@ struct TimerView: View {
             countdownTime = CGFloat(TimerInfo.timerLength * 60)
         }
         .sheet(item: $newPokemon) { pokemon in
-            discoveredPokemonView(pokemon: pokemon)
-                .onAppear {
-                    print("Adding \(pokemon.name?.capitalized ?? "N/A") to pokedex")
-                    collection.ownedPokemon.append(pokemon)
-                    print(collection.ownedPokemon.debugDescription)
-                }
-                .onDisappear {
-                    newPokemon = nil
-                }
+            DiscoveredPokemonView(newPokemon: $newPokemon)
+                .onAppear { collection.ownedPokemon.append(pokemon) }
+                .onDisappear { newPokemon = nil }
         }
     }
     
     func discoverPokemon() async {
-        
         let randNum = Int.random(in: 1...Generation.LastIDInGeneration.gen1.rawValue)
         // TODO: disallow numbers already in collectedPokémon; handle if someone has discovered all available pokémon
         // TODO: restrict pokemon discovery to first-level evolutions
@@ -96,38 +89,6 @@ struct TimerView: View {
         } else {
             print("Error loading pokemon with ID \(randNum)")
         }
-    }
-    
-    func discoveredPokemonView(pokemon: PKMPokemon) -> some View {
-        VStack {
-            Spacer()
-            
-            Text("Nice work, trainer!")
-                .font(.largeTitle)
-                .padding(.vertical)
-            Group {
-                Text(pokemon.name?.capitalized ?? "A Pokémon")
-                    .foregroundColor(.accentColor) +
-                Text(" has been added to your Pokédex.")
-                    .foregroundColor(.secondary)
-            }.font(.headline)
-            
-            Spacer()
-            PokemonDetailView(pokemon: pokemon)
-            Spacer()
-            
-            Button {
-                // Clear newPokemon to dismiss the sheet
-                newPokemon = nil
-            } label: {
-                Text("OK")
-            }
-            .buttonStyle(.borderedProminent).tint(.purple)
-            
-            Spacer()
-        }
-        .fontWeight(.medium)
-        .padding(.horizontal)
     }
 }
 

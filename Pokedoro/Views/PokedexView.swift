@@ -70,19 +70,24 @@ struct PokedexView: View {
             .toolbar {
                 ToolbarItem {
                     Picker("Sort", selection: $currentSortMethod) {
-                        ForEach(SortMethod.allCases, id: \.self) {
-                            Text($0.rawValue)
-                        }
+                        ForEach(SortMethod.allCases, id: \.self) { Text($0.rawValue) }
                     }
                 }
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Text("\(collection.ownedPokemon.count)/\(Generation.LastIDInGeneration.gen1.rawValue)")
-                        .fontWeight(.medium)
-                        .foregroundColor(.secondary)
-                        .padding(.horizontal)
-                }
+                ToolbarItem(placement: .navigationBarLeading) { collectionCountDisplay }
             }
         }
+    }
+    
+    var collectionCountDisplay: some View {
+        Group {
+            Text(String(collection.ownedPokemon.count))
+                .font(.title2) +
+            Text("/\(Generation.LastIDInGeneration.gen1.rawValue)")
+                .font(.subheadline)
+        }
+            .fontWeight(.medium)
+            .foregroundColor(.secondary)
+            .padding(.horizontal)
     }
     
     func populatePokemonList() async {
