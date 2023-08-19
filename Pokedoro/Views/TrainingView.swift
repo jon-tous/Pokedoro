@@ -13,13 +13,6 @@ struct TrainingView: View {
             BackgroundGradient()
             Text("Choose a Pokémon with an evolution available to train!")
         }
-        .task {
-            populateTrainablePokemon()
-        }
-    }
-    
-    func populateTrainablePokemon() {
-        
     }
 }
 

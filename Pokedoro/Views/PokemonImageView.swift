@@ -50,7 +50,6 @@ struct PokemonImageView: View {
         do {
             let (data, _) = try await URLSession.shared.data(from: pokemonImagesEntryURL)
             if let decodedResponse = try? JSONDecoder().decode(ImageAPIResponse.self, from: data) {
-                // Update imageURL state based on silhouette bool
                 if silhouette == false {
                     imageUrl = URL(string: decodedResponse.imageUrl)
                 } else {

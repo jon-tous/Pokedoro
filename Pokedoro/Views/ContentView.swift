@@ -20,10 +20,8 @@ struct ContentView: View {
             ExploreView()
                 .tabItem { Label("Catch", systemImage: "figure.walk") }.tag(0)
             
-            NavigationStack {
-                PokedexView()
-            }
-            .tabItem { Label("Pokédex", systemImage: "text.book.closed.fill") }.tag(1)
+            NavigationStack { PokedexView() }
+                .tabItem { Label("Pokédex", systemImage: "text.book.closed.fill") }.tag(1)
             
             Group {
                 if collection.ownedPokemon.count < trainingUnlockLevel {
@@ -35,17 +33,17 @@ struct ContentView: View {
                 }
             }.tag(2)
             
-            NavigationStack {
-                SettingsView()
-            }
-            .tabItem { Label("Settings", systemImage: "gearshape") }.tag(3)
+            NavigationStack { SettingsView() }
+                .tabItem { Label("Settings", systemImage: "gearshape") }.tag(3)
         }
-        .onAppear {
-            // Fixes bug with iOS 15+ tab bar background
-            let tabBarAppearance = UITabBarAppearance()
-            tabBarAppearance.configureWithDefaultBackground()
-            UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
-        }
+        .onAppear(perform: adjustTabBarConfig)
+    }
+    
+    /// Fixes bug with iOS 15+ tab bar background
+    func adjustTabBarConfig() {
+        let tabBarAppearance = UITabBarAppearance()
+        tabBarAppearance.configureWithDefaultBackground()
+        UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
     }
 }
 

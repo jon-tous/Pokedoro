@@ -92,29 +92,29 @@ struct PokedexView: View {
             Text("/\(Generation.LastIDInGeneration.gen1.rawValue)")
                 .font(.subheadline)
         }
-            .fontWeight(.medium)
-            .foregroundColor(.secondary)
-            .padding(.horizontal)
+        .fontWeight(.medium)
+        .foregroundColor(.secondary)
+        .padding(.horizontal)
     }
     
     func populatePokemonList() async {
         for num in 1...Generation.LastIDInGeneration.gen1.rawValue {
             if pokemonList.contains(where: { $0.id == num }) { continue }
+            
             do {
+                // Load species data
                 let pokemon = try await pokemonAPI.pokemonService.fetchPokemon(num)
                 let species = try await pokemonAPI.pokemonService.fetchPokemonSpecies(num)
-                print("appending \(pokemon.name ?? "") (\(pokemon.id ?? -1)) - \(species.name ?? "") (species ID \(species.id ?? -1))")
+                print("Loaded \(pokemon.name ?? "") (\(pokemon.id ?? -1)) - \(species.name ?? "") (species ID \(species.id ?? -1))")
                 pokemonList.append(pokemon)
                 
+                // Load evolution data
                 if let evolutionChainID = Int((species.evolutionChain?.url?.split(separator: "/").last)!), let name = pokemon.name {
-                    
                     var nextEvolutions = Set<String>()
                     
                     if let evolutionChain = try await pokemonAPI.evolutionService.fetchEvolutionChain(evolutionChainID).chain {
-                        
                         var curLink = evolutionChain // starts as base evolution chain link
                         
-                        // Keep following chain links until we get to the species for this pokemon
                         while curLink.species?.name != species.name {
                             if let nextLinks = curLink.evolvesTo {
                                 for link in nextLinks {
@@ -127,7 +127,6 @@ struct PokedexView: View {
                             }
                         }
                         
-                        // Now we have the correct species in the chain
                         if curLink.species?.name == species.name {
                             // we want to insert all next evolvesTo into the set
                             if let evolutionOptions = curLink.evolvesTo {
@@ -137,26 +136,21 @@ struct PokedexView: View {
                             }
                         }
                     }
-                    print("evolves to \(nextEvolutions.description)")
                     pokemonEvolutions.pokemonEvolutions[name] = nextEvolutions
                 }
             } catch {
                 print("Error loading pokemon with ID \(num)")
             }
         }
-        print(pokemonEvolutions.pokemonEvolutions.debugDescription)
     }
     
     func searchEvolutionPath(forName name: String?, startingAt root: PKMClainLink) -> PKMClainLink? {
         guard let name = name else { return nil }
         
-        // Success case
         if root.species?.name == name { return root }
         
-        // Continue search on its children
         while root.evolvesTo != nil && !root.evolvesTo!.isEmpty {
             // recurse on its children, stopping to return the chain link if name matches
-            
             if let nextLinks = root.evolvesTo {
                 for link in nextLinks {
                     // Follow each evolution path searching for species name

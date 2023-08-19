@@ -78,10 +78,9 @@ struct TimerView: View {
         }
     }
     
+    /// Future: disallow numbers already in collectedPokémon; handle if someone has discovered all available pokémon, restrict pokemon discovery to first-level evolutions
     func discoverPokemon() async {
         let randNum = Int.random(in: 1...Generation.LastIDInGeneration.gen1.rawValue)
-        // TODO: disallow numbers already in collectedPokémon; handle if someone has discovered all available pokémon
-        // TODO: restrict pokemon discovery to first-level evolutions
         
         if let pokemon = try? await pokemonAPI.pokemonService.fetchPokemon(randNum) {
             newPokemon = pokemon
