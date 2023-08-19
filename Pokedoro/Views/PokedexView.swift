@@ -16,6 +16,8 @@ struct PokedexView: View {
     @State private var pokemonList = [PKMPokemon]()
     @State private var selection: PKMPokemon?
     
+    @State private var showingUndiscoveredAlert = false
+    
     enum SortMethod: String, CaseIterable {
         case byIDNumber = "Sort by ID"
         case byType = "Sort by Type"
@@ -41,6 +43,8 @@ struct PokedexView: View {
                         .onTapGesture {
                             if collection.ownedPokemon.contains(pokemon) {
                                 selection = pokemon
+                            } else {
+                                showingUndiscoveredAlert = true
                             }
                         }
                     }
@@ -74,6 +78,9 @@ struct PokedexView: View {
                     }
                 }
                 ToolbarItem(placement: .navigationBarLeading) { collectionCountDisplay }
+            }
+            .alert("Undiscovered Pokémon!", isPresented: $showingUndiscoveredAlert) { } message: {
+                Text("Start a focus session to catch more Pokémon.")
             }
         }
     }
