@@ -13,6 +13,7 @@ struct PokemonTitleView: View {
     @EnvironmentObject var pokemonEvolutions: PokemonEvolutions
     
     let pokemon: PKMPokemon
+    let useTypeColors: Bool
     
     var body: some View {
         let displayName = collection.ownedPokemon.contains(pokemon) ? (pokemon.name?.capitalized ?? "") : "???"
@@ -21,7 +22,7 @@ struct PokemonTitleView: View {
         return VStack {
             HStack {
                 Text(displayName)
-                    .font(.callout)
+                    .font(.headline)
                     .fontWeight(.medium)
                 if hasEvolution(pokemon: pokemon) && allEvolutionsOwned(for: pokemon) {
                     evolvableIcon
@@ -30,9 +31,9 @@ struct PokemonTitleView: View {
             HStack {
                 ForEach(displayTypes, id: \.self) { type in
                     Text(type)
-                        .font(.caption)
-//                        .fontWeight(.medium)  // Not sure if I like medium weight or normal
-                        .foregroundColor(.secondary)
+                        .font(.subheadline)
+                        .fontWeight(useTypeColors ? .medium : .regular)
+                        .foregroundColor(useTypeColors ? Color(type) : .secondary)
                 }
             }
         }

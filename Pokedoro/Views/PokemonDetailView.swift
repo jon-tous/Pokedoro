@@ -19,7 +19,7 @@ struct PokemonDetailView: View {
 //                             silhouette: !collection.ownedPokemon.contains(pokemon))
                              silhouette: false) // for debugging
                 .padding()
-            PokemonTitleView(pokemon: pokemon)
+            PokemonTitleView(pokemon: pokemon, useTypeColors: true)
         }
     }
 }

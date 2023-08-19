@@ -13,7 +13,7 @@ struct TimerView: View {
     @EnvironmentObject var collection: PokemonCollection
     
     @State private var countdownTime = CGFloat(TimerInfo.timerLength * 60)
-    @State private var timerRunning = false
+    @Binding var timerRunning: Bool
     
     @State private var newPokemon: PKMPokemon?
     
@@ -138,7 +138,7 @@ struct TimerInfo {
 
 struct TimerView_Previews: PreviewProvider {
     static var previews: some View {
-        TimerView()
+        TimerView(timerRunning: .constant(false))
             .environmentObject(PokemonAPI())
             .environmentObject(PokemonCollection())
     }

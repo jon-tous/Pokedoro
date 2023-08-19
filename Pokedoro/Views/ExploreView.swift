@@ -10,25 +10,37 @@ import SwiftUI
 struct ExploreView: View {
     @AppStorage("timerLength") var timerLength = 25
     
+    @State var timerRunning = false
+    
     var body: some View {
         ZStack {
             BackgroundGradient()
             VStack {
                 Spacer()
-                Group {
-                    Text("Focus for ") +
-                    Text("\(timerLength) \(timerLength == 1 ? "minute" : "minutes")").bold() +
-                    Text(" to catch a new Pokémon!")
-                }
+                message
                     .font(.title).fontWeight(.medium)
                     .multilineTextAlignment(.center)
                     .padding()
                 Spacer()
-                TimerView()
+                TimerView(timerRunning: $timerRunning)
                 Spacer()
                 Spacer()
             }
         }
+    }
+    
+    var timerNotRunnningMessage: some View {
+        Text("Focus for ") +
+        Text("\(timerLength) \(timerLength == 1 ? "minute" : "minutes")").bold() +
+        Text(" to catch a new Pokémon!")
+    }
+    
+    var timerRunningMessage: some View {
+        Text("Searching for wild Pokémon.\nStay focused, trainer!")
+    }
+    
+    @ViewBuilder var message: some View {
+        if timerRunning { timerRunningMessage } else { timerNotRunnningMessage }
     }
 }
 
