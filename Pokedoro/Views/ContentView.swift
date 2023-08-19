@@ -18,7 +18,7 @@ struct ContentView: View {
     var body: some View {
         TabView(selection: $selectedTab) {
             ExploreView()
-                .tabItem { Label("Explore", systemImage: "figure.walk") }.tag(0)
+                .tabItem { Label("Catch", systemImage: "figure.walk") }.tag(0)
             
             NavigationStack {
                 PokedexView()
