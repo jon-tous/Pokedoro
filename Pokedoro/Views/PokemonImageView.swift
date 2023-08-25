@@ -24,9 +24,11 @@ struct PokemonImageView: View {
             if imageUrl != nil {
                 AsyncImage(url: imageUrl) { image in
                     image
+                        .renderingMode(silhouette ? .template : .original)
                         .resizable()
                         .scaledToFit()
                         .scaleEffect(0.8)
+                        .foregroundColor(.black.opacity(0.8)) // only affects the silhouette, not the original image
                 } placeholder: {
                     ProgressView()
                 }
@@ -35,36 +37,19 @@ struct PokemonImageView: View {
         .task { await fetchImageURL() }
     }
     
-    /// Get image url from microservice based on pokemon ID and silhouette param
-    ///
-    /// Note: Currently, the image service is locally hosted
     private func fetchImageURL() async -> Void {
-        let imageServiceBaseURL = "http://localhost:3000/pokemon/"
-        
-        // Get image entry URL for this pokemon ID
-        guard let pokemonImagesEntryURL = URL(string: imageServiceBaseURL + String(id)) else {
-            print("invalid image entry URL")
+        let baseImageURL = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/"
+        guard let url = URL(string: baseImageURL + String(id) + ".png") else {
+            print("invalid image url for id \(id)")
             return
         }
-        
-        do {
-            let (data, _) = try await URLSession.shared.data(from: pokemonImagesEntryURL)
-            if let decodedResponse = try? JSONDecoder().decode(ImageAPIResponse.self, from: data) {
-                if silhouette == false {
-                    imageUrl = URL(string: decodedResponse.imageUrl)
-                } else {
-                    imageUrl = URL(string: decodedResponse.silhouetteImageUrl)
-                }
-            }
-        } catch {
-            print("Invalid image entry response")
-        }
+        imageUrl = url
     }
 }
 
 struct PokemonImageView_Previews: PreviewProvider {
     static var previews: some View {
-        PokemonImageView(id: 13, types: ["Grass", "Poison"], silhouette: true)
+        PokemonImageView(id: 13, types: ["Grass", "Poison"], silhouette: false)
             .frame(width: 300, height: 300)
     }
 }
